@@ -1,80 +1,80 @@
-import * as React from 'react';
+import {
+  Card as MantineCard,
+  CardSection as MantineCardSection,
+  type CardProps as MantineCardProps,
+  Title,
+  Text,
+} from '@mantine/core';
+import { forwardRef } from 'react';
+import type {
+  ComponentPropsWithoutRef,
+  MouseEventHandler,
+  ReactNode,
+} from 'react';
 
-import { cn } from '@/lib/utils';
+type CardProps = MantineCardProps & {
+  children?: ReactNode;
+  className?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
+  tabIndex?: number;
+  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
+};
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('bg-card text-card-foreground', className)}
-    {...props}
-  />
-));
-Card.displayName = 'Card';
+type CardSectionPropsWithRef = ComponentPropsWithoutRef<
+  typeof MantineCardSection
+> & {
+  children?: ReactNode;
+  className?: string;
+};
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('flex flex-col space-y-1.5 p-6', className)}
-    {...props}
-  />
-));
-CardHeader.displayName = 'CardHeader';
+const Card = forwardRef<HTMLDivElement, CardProps>(function Card(props, ref) {
+  return <MantineCard ref={ref} radius="md" withBorder {...props} />;
+});
 
-const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      'text-2xl font-semibold leading-none tracking-tight',
-      className
-    )}
-    {...props}
-  />
-));
-CardTitle.displayName = 'CardTitle';
+function CardHeader({ children, ...props }: CardSectionPropsWithRef) {
+  return (
+    <MantineCardSection {...props} inheritPadding>
+      {children}
+    </MantineCardSection>
+  );
+}
 
-const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('text-sm text-muted-foreground', className)}
-    {...props}
-  />
-));
-CardDescription.displayName = 'CardDescription';
+function CardTitle({ children, ...props }: CardSectionPropsWithRef) {
+  return (
+    <MantineCardSection {...props} inheritPadding py="sm">
+      <Title order={3}>{children}</Title>
+    </MantineCardSection>
+  );
+}
 
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
-));
-CardContent.displayName = 'CardContent';
+function CardDescription({ children, ...props }: CardSectionPropsWithRef) {
+  return (
+    <MantineCardSection {...props} inheritPadding py="xs">
+      <Text size="sm" c="dimmed">
+        {children}
+      </Text>
+    </MantineCardSection>
+  );
+}
 
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('flex items-center p-6 pt-0', className)}
-    {...props}
-  />
-));
-CardFooter.displayName = 'CardFooter';
+function CardContent({ children, ...props }: CardSectionPropsWithRef) {
+  return (
+    <MantineCardSection {...props} inheritPadding>
+      {children}
+    </MantineCardSection>
+  );
+}
+
+function CardFooter({ children, ...props }: CardSectionPropsWithRef) {
+  return (
+    <MantineCardSection {...props} inheritPadding>
+      {children}
+    </MantineCardSection>
+  );
+}
 
 export {
-  Card,
+  Card as Card,
   CardHeader,
   CardFooter,
   CardTitle,

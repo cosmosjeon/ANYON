@@ -82,6 +82,36 @@
 - Mantine `Modal` 스타일은 프로젝트 전용 CSS Modules로 통일하고, NiceModal show/hide API는 변경하지 않음
 - Tailwind 삭제 전에 `_deprecated/dialogs`에 백업을 남겨 필요 시 롤백
 
+### 9. 테스트 원칙
+- 단계별로 변경/신규 로직에 대한 테스트 코드를 지속적으로 작성 (테마 어댑터, 스타일 오버라이드, 기본 UI 래퍼 등)
+- 프런트엔드: Vitest + Testing Library로 최소 렌더/동작 검증, `pnpm run test && pnpm run check` 병행
+
+---
+
+### ✅ 진행 현황 메모 (2025-02-12 최신)
+
+#### 완료된 항목
+- 테마/Provider 통합: MantineProvider + Modals/Notifications + ColorSchemeScript를 기존 ThemeProvider 내부에 통합, `useTheme` API 유지 (`frontend/src/components/theme-provider.tsx`, `mantine-theme-adapter.tsx`, `mantine-theme.ts`).
+- 기본 UI Mantine 래퍼 전환 및 테스트:
+  - Button/Card/Input/Textarea/Checkbox/Switch/Select/Loader/Alert/Badge/Tooltip 어댑터 완료, Radix/shadcn 원본은 `_deprecated/`에 백업.
+  - Select/Tooltip 어댑터는 Radix 스타일 JSX(Trigger/Value/Content/Item)를 파싱해 Mantine 컴포넌트를 구동하도록 구현, 사용처 변경 최소화.
+  - Vitest + Testing Library 테스트 추가(테마 어댑터, 스타일 오버라이드, 입력/피드백 계열) 후 `pnpm run test`, `pnpm run check` 통과.
+  - Vitest 셋업에 `ResizeObserver` 스텁 추가.
+- Kanban 스타일 1차 적용: 카드/헤더에 Mantine Card `p="md"`, `shadow="sm"` 적용, 드롭 영역 outline을 Mantine CSS 변수 기반으로 수정, 드래그 시 shadow 강조. DnD 로직 그대로 유지 (`frontend/src/components/ui/shadcn-io/kanban/index.tsx`).
+- Tooltip asChild 의존 제거: Mantine Tooltip 어댑터로 교체해 Trigger/Content 추출 방식으로 동작.
+- ToggleGroup 타입 오류 해결: Radix 기반으로 복원해 기존 `active` prop 사용처 유지.
+
+#### 남은 작업(우선순위 제안)
+1) Tabs/ToggleGroup를 Mantine 기반으로 재정의하거나 호환 어댑터 추가 후 실제 사용처 업데이트.
+2) Kanban 스타일 Tailwind 클래스 추가 치환(컬럼/카드 레이아웃, 드래그 인디케이터 완성) 및 Framer Motion 여부 결정.
+3) Tooltip/DropdownMenu 등을 Mantine 스타일로 완전 전환할지 결정(현재 Tooltip은 Mantine 어댑터, DropdownMenu는 Radix).
+4) Dialog/NiceModal 마이그레이션, 페이지/칸반 UI 치환, Tailwind 제거/글로벌 스타일 정리, 의존성 정리(Day 15).
+
+#### 현재 상태
+- 진행률: 약 60%
+- 테스트: `pnpm run check` / `pnpm run test -- --runInBand` 모두 통과
+- 백업: `_deprecated/` 아래 기존 UI 컴포넌트 원본 유지 (버튼/카드/입력/체크/스위치/셀렉트/토글/얼럿/배지/드롭다운 등)
+
 ---
 
 ## 🗓️ 상세 실행 계획

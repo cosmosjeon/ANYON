@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📚 Documentation
+
+For detailed development guidelines, see the following documents:
+
+- **[Development Workflow](./docs/development-workflow.md)** - Complete development process, from setup to PR
+- **[Frontend Coding Standards](./docs/frontend-coding-standards.md)** - TypeScript, React, and styling guidelines
+- **[Backend Coding Standards](./docs/backend-coding-standards.md)** - Rust, Axum, and database patterns
+- **[Testing Guide](./docs/testing-guide.md)** - Testing strategies and best practices
+
+**Quick Reference**: For quick commands and essential info, continue reading below.
+
 ## Essential Commands
 
 ### Development

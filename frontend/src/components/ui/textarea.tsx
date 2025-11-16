@@ -1,22 +1,25 @@
-import * as React from 'react';
+import {
+  Textarea as MantineTextarea,
+  type TextareaProps as MantineTextareaProps,
+} from '@mantine/core';
+import { forwardRef, type Ref } from 'react';
 
-import { cn } from '@/lib/utils';
+export interface TextareaProps extends MantineTextareaProps {}
 
-const Textarea = React.forwardRef<
-  HTMLTextAreaElement,
-  React.ComponentProps<'textarea'>
->(({ className, ...props }, ref) => {
-  return (
-    <textarea
-      className={cn(
-        'flex min-h-[80px] w-full bg-transparent border px-3 py-2 text-sm ring-offset-background focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-});
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  function Textarea({ radius = 'md', autosize = false, minRows = 3, ...props }, ref: Ref<HTMLTextAreaElement>) {
+    return (
+      <MantineTextarea
+        ref={ref}
+        radius={radius}
+        autosize={autosize}
+        minRows={minRows}
+        {...props}
+      />
+    );
+  }
+);
+
 Textarea.displayName = 'Textarea';
 
 export { Textarea };

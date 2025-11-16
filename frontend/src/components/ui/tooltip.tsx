@@ -1,30 +1,86 @@
-import * as React from 'react';
-import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import {
+  Tooltip as MantineTooltip,
+  type TooltipProps as MantineTooltipProps,
+} from '@mantine/core';
+import {
+  Children,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 
-import { cn } from '@/lib/utils';
+type AllowedPosition = MantineTooltipProps['position'];
 
-const TooltipProvider = TooltipPrimitive.Provider;
+type TooltipTriggerProps = {
+  children: ReactNode;
+  asChild?: boolean;
+};
 
-const Tooltip = TooltipPrimitive.Root;
+type TooltipContentProps = {
+  children: ReactNode;
+  side?: 'top' | 'bottom' | 'left' | 'right';
+};
 
-const TooltipTrigger = TooltipPrimitive.Trigger;
+const sideToPosition = (
+  side: TooltipContentProps['side']
+): AllowedPosition => {
+  switch (side) {
+    case 'left':
+      return 'left';
+    case 'right':
+      return 'right';
+    case 'bottom':
+      return 'bottom';
+    case 'top':
+    default:
+      return 'top';
+  }
+};
 
-const TooltipContent = React.forwardRef<
-  React.ElementRef<typeof TooltipPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
->(({ className, sideOffset = 4, ...props }, ref) => (
-  <TooltipPrimitive.Portal>
-    <TooltipPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        'z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-tooltip-content-transform-origin]',
-        className
-      )}
-      {...props}
-    />
-  </TooltipPrimitive.Portal>
-));
-TooltipContent.displayName = TooltipPrimitive.Content.displayName;
+const TooltipTrigger = ({ children }: TooltipTriggerProps) => <>{children}</>;
+const TooltipContent = ({ children }: TooltipContentProps) => <>{children}</>;
+
+const TooltipProvider = ({ children }: { children: ReactNode }) => (
+  <>{children}</>
+);
+
+type TooltipRootProps = {
+  children: ReactNode;
+  openDelay?: number;
+  closeDelay?: number;
+};
+
+const Tooltip = ({ children, openDelay, closeDelay }: TooltipRootProps) => {
+  let trigger: ReactNode = null;
+  let content: ReactNode = null;
+  let side: TooltipContentProps['side'] = 'top';
+
+  Children.forEach(children, (child) => {
+    if (!isValidElement(child)) return;
+    const element = child as ReactElement<any>;
+    if (element.type === TooltipTrigger) {
+      trigger = element.props.children;
+    }
+    if (element.type === TooltipContent) {
+      content = element.props.children;
+      side = element.props.side ?? side;
+    }
+  });
+
+  if (!trigger || !content) {
+    return <>{children}</>;
+  }
+
+  return (
+    <MantineTooltip
+      label={content}
+      position={sideToPosition(side)}
+      openDelay={openDelay}
+      closeDelay={closeDelay}
+    >
+      <span>{trigger}</span>
+    </MantineTooltip>
+  );
+};
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };

@@ -20,6 +20,15 @@ Object.defineProperty(window, 'matchMedia', {
   value: vi.fn(createMatchMedia(false)),
 });
 
+// Mantine ScrollArea uses ResizeObserver
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+// @ts-expect-error jsdom global inject
+global.ResizeObserver = ResizeObserverStub;
+
 // jsdom의 localStorage를 Mantine color scheme manager가 사용하므로 간단한 스텁을 제공
 const storage = new Map<string, string>();
 Object.defineProperty(window, 'localStorage', {

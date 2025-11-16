@@ -106,9 +106,11 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader message="Loading..." size={32} />
-      </div>
+      <ThemeProvider initialTheme={ThemeMode.SYSTEM}>
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <Loader message="Loading..." size={32} />
+        </div>
+      </ThemeProvider>
     );
   }
 

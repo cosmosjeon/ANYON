@@ -1,36 +1,35 @@
-import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import {
+  Badge as MantineBadge,
+  type BadgeProps as MantineBadgeProps,
+} from '@mantine/core';
 
-import { cn } from '@/lib/utils';
-
-const badgeVariants = cva(
-  'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-  {
-    variants: {
-      variant: {
-        default:
-          'border-foreground/50 bg-primary text-primary-foreground hover:bg-primary/80',
-        secondary:
-          'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        destructive:
-          'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
-        outline: 'text-foreground',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
+type Variant = 'default' | 'secondary' | 'outline' | 'destructive';
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
-
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  );
+  extends Omit<MantineBadgeProps, 'variant' | 'color'> {
+  variant?: Variant;
+  title?: string;
 }
 
-export { Badge, badgeVariants };
+const mapVariant = (
+  variant: Variant | undefined
+): Pick<MantineBadgeProps, 'variant' | 'color'> => {
+  switch (variant) {
+    case 'secondary':
+      return { variant: 'light', color: 'gray' };
+    case 'destructive':
+      return { variant: 'filled', color: 'danger' as MantineBadgeProps['color'] };
+    case 'outline':
+      return { variant: 'outline', color: 'gray' };
+    case 'default':
+    default:
+      return { variant: 'filled', color: 'primary' };
+  }
+};
+
+function Badge({ variant = 'default', ...props }: BadgeProps) {
+  const { variant: mantineVariant, color } = mapVariant(variant);
+  return <MantineBadge radius="sm" variant={mantineVariant} color={color} {...props} />;
+}
+
+export { Badge };

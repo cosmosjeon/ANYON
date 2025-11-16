@@ -52,12 +52,12 @@ export const KanbanBoard = ({ id, children, className }: KanbanBoardProps) => {
 
   return (
     <div
-      className={cn(
-        'flex min-h-40 flex-col',
-        isOver ? 'outline-primary' : 'outline-black',
-        className
-      )}
+      className={cn('flex min-h-40 flex-col', className)}
       ref={setNodeRef}
+      style={{
+        outline: '1px dashed transparent',
+        outlineColor: isOver ? 'var(--mantine-color-primary-5)' : 'transparent',
+      }}
     >
       {children}
     </div>
@@ -111,9 +111,11 @@ export const KanbanCard = ({
 
   return (
     <Card
+      p="md"
+      shadow="sm"
       className={cn(
-        'p-3 outline-none border-b flex-col space-y-2',
-        isDragging && 'cursor-grabbing',
+        'outline-none flex-col space-y-2 transition-shadow',
+        isDragging && 'cursor-grabbing shadow-lg',
         isOpen && 'ring-2 ring-secondary-foreground ring-inset',
         className
       )}
@@ -164,9 +166,10 @@ export const KanbanHeader = (props: KanbanHeaderProps) => {
 
   return (
     <Card
+      p="md"
+      shadow="sm"
       className={cn(
-        'sticky top-0 z-20 flex shrink-0 items-center gap-2 p-3 border-b border-dashed flex gap-2',
-        'bg-background',
+        'sticky top-0 z-20 flex shrink-0 items-center gap-2 border-b border-dashed bg-background',
         props.className
       )}
       style={{

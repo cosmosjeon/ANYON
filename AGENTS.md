@@ -1,5 +1,16 @@
 # Repository Guidelines
 
+## 📚 Detailed Documentation
+
+For comprehensive development guidelines and coding standards, refer to:
+
+- **[Development Workflow](./docs/development-workflow.md)** - Complete development process from setup to PR
+- **[Frontend Coding Standards](./docs/frontend-coding-standards.md)** - TypeScript, React, ESLint, Prettier rules
+- **[Backend Coding Standards](./docs/backend-coding-standards.md)** - Rust, Axum, SQLx, and database patterns
+- **[Testing Guide](./docs/testing-guide.md)** - Testing strategies, patterns, and best practices
+
+**Quick Reference**: Key guidelines and commands are summarized below.
+
 ## Project Structure & Module Organization
 - `crates/`: Rust workspace crates — `server` (API + bins), `db` (SQLx models/migrations), `executors`, `services`, `utils`, `deployment`, `local-deployment`.
 - `frontend/`: React + TypeScript app (Vite, Tailwind). Source in `frontend/src`.
