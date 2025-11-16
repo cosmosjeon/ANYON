@@ -51,7 +51,11 @@ export default schemas;
 
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: ["@emotion/babel-plugin"],
+      },
+    }),
     sentryVitePlugin({ org: "bloop-ai", project: "vibe-kanban" }),
     executorSchemasPlugin(),
   ],
