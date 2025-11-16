@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "check": "tsc --noEmit",
     "preview": "vite preview",
+    "test": "vitest run",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 110",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "lint:i18n": "LINT_I18N=true eslint . --ext ts,tsx --max-warnings 0",
@@ -93,6 +94,8 @@
     "@rjsf/utils": "6.0.0-beta.11",
     "@rjsf/validator-ajv8": "6.0.0-beta.11",
     "@tailwindcss/container-queries": "^0.1.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/lodash": "^4.17.20",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -107,12 +110,14 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "jsdom": "^27.2.0",
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.6.1",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.9.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vitest": "^4.0.9"
   }
 }

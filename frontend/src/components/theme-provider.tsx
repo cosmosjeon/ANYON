@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
+import {
+  ColorSchemeScript,
+  MantineProvider,
+} from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
+import { mantineTheme } from '@/theme/mantine-theme';
+import { MantineThemeAdapter } from '@/theme/mantine-theme-adapter';
 import { ThemeMode } from 'shared/types';
 
 type ThemeProviderProps = {
@@ -21,46 +29,23 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   initialTheme = ThemeMode.SYSTEM,
-  ...props
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<ThemeMode>(initialTheme);
-
-  // Update theme when initialTheme changes
-  useEffect(() => {
-    setThemeState(initialTheme);
-  }, [initialTheme]);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-
-    root.classList.remove('light', 'dark');
-
-    if (theme === ThemeMode.SYSTEM) {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme.toLowerCase());
-  }, [theme]);
-
-  const setTheme = (newTheme: ThemeMode) => {
-    setThemeState(newTheme);
-  };
-
-  const value = {
-    theme,
-    setTheme,
-  };
-
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
-    </ThemeProviderContext.Provider>
+    <MantineProvider
+      theme={mantineTheme}
+      defaultColorScheme="auto"
+      cssVariablesSelector=":root"
+    >
+      <ColorSchemeScript />
+      <MantineThemeAdapter initialTheme={initialTheme}>
+        {(value) => (
+          <ThemeProviderContext.Provider value={value}>
+            <Notifications position="top-right" zIndex={1000} />
+            <ModalsProvider>{children}</ModalsProvider>
+          </ThemeProviderContext.Provider>
+        )}
+      </MantineThemeAdapter>
+    </MantineProvider>
   );
 }
 

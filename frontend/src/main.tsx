@@ -1,5 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import '@mantine/core/styles.css';
+import '@mantine/dropzone/styles.css';
+import '@mantine/carousel/styles.css';
+import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/modals/styles.css';
 import App from './App.tsx';
 import './styles/index.css';
 import { ClickToComponent } from 'click-to-react-component';

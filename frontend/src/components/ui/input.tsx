@@ -1,52 +1,50 @@
-import * as React from 'react';
-import { cn } from '@/lib/utils';
+import { TextInput, TextInputProps } from '@mantine/core';
+import { forwardRef, type KeyboardEvent, type Ref } from 'react';
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  onCommandEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onCommandShiftEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  extends Omit<TextInputProps, 'onKeyDown'> {
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
+  onCommandEnter?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onCommandShiftEnter?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      className,
-      type,
-      onKeyDown,
-      onCommandEnter,
-      onCommandShiftEnter,
-      ...props
-    },
-    ref
-  ) => {
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Escape') {
-        e.currentTarget.blur();
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  {
+    onKeyDown,
+    onCommandEnter,
+    onCommandShiftEnter,
+    size = 'sm',
+    radius = 'md',
+    variant = 'default',
+    ...props
+  },
+  ref: Ref<HTMLInputElement>
+) {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      e.currentTarget.blur();
+    }
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      if (e.metaKey && e.shiftKey) {
+        onCommandShiftEnter?.(e);
+      } else {
+        onCommandEnter?.(e);
       }
-      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
-        if (e.metaKey && e.shiftKey) {
-          onCommandShiftEnter?.(e);
-        } else {
-          onCommandEnter?.(e);
-        }
-      }
-      onKeyDown?.(e);
-    };
+    }
+    onKeyDown?.(e);
+  };
 
-    return (
-      <input
-        ref={ref}
-        type={type}
-        onKeyDown={handleKeyDown}
-        className={cn(
-          'flex h-10 w-full border px-3 py-2 text-sm ring-offset-background file:border-0 bg-transparent file:text-sm file:font-medium focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
+  return (
+    <TextInput
+      ref={ref}
+      onKeyDown={handleKeyDown}
+      size={size}
+      radius={radius}
+      variant={variant}
+      {...props}
+    />
+  );
+});
 
 Input.displayName = 'Input';
 export { Input };

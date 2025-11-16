@@ -1,0 +1,35 @@
+:root {
+  /* Map VS Code overrides to Mantine CSS variables so extension theming keeps working */
+  --mantine-color-body: var(--vscode-editor-background, hsl(var(--background)))
+    !important;
+  --mantine-color-text: var(--vscode-editor-foreground, hsl(var(--foreground)))
+    !important;
+  --mantine-color-dimmed: var(
+      --vscode-descriptionForeground,
+      hsl(var(--muted-foreground))
+    ) !important;
+  --mantine-color-anchor: var(--vscode-focusBorder, hsl(var(--accent)))
+    !important;
+  --mantine-color-placeholder: var(
+      --vscode-input-placeholderForeground,
+      hsl(var(--muted-foreground))
+    ) !important;
+  --mantine-color-default: var(--vscode-input-background, hsl(var(--muted)))
+    !important;
+  --mantine-primary-color-filled: var(
+      --vscode-button-background,
+      hsl(var(--primary))
+    ) !important;
+  --mantine-primary-color-contrast: var(
+      --vscode-button-foreground,
+      hsl(var(--foreground))
+    ) !important;
+}
+
+[data-mantine-color-scheme='dark'] {
+  color-scheme: dark;
+}
+
+[data-mantine-color-scheme='light'] {
+  color-scheme: light;
+}

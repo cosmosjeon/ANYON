@@ -1,26 +1,23 @@
-import { Loader2 } from 'lucide-react';
-import React from 'react';
+import { Loader as MantineLoader, Stack, Text } from '@mantine/core';
+import { type ReactNode } from 'react';
 
 interface LoaderProps {
-  message?: string | React.ReactElement;
-  size?: number;
+  message?: ReactNode;
+  size?: number | string;
   className?: string;
 }
 
-export const Loader: React.FC<LoaderProps> = ({
+export const Loader = ({
   message,
   size = 32,
-  className = '',
-}) => (
-  <div
-    className={`flex flex-col items-center justify-center gap-2 ${className}`}
-  >
-    <Loader2
-      className="animate-spin text-muted-foreground"
-      style={{ width: size, height: size }}
-    />
-    {!!message && (
-      <div className="text-center text-muted-foreground">{message}</div>
-    )}
-  </div>
+  className,
+}: LoaderProps): JSX.Element => (
+  <Stack align="center" gap="xs" className={className}>
+    <MantineLoader data-testid="loader-spinner" color="primary" size={size} />
+    {message ? (
+      <Text size="sm" c="dimmed" ta="center" data-testid="loader-message">
+        {message}
+      </Text>
+    ) : null}
+  </Stack>
 );
